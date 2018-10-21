@@ -1,5 +1,3 @@
-import sun.reflect.generics.tree.Tree;
-
 public class Sudoku
 {
   /* 
@@ -7,7 +5,7 @@ public class Sudoku
   e 1 se alguma for falsa
   */
 
-  public static int Verificação(int num, int d)
+  public static int Verificacao(int num, int d)
   {
     // Condição 1
     //------------------------------------------------------------
@@ -61,6 +59,6 @@ public class Sudoku
 
   public static void main(String[] args)
   {
-    System.out.println(Verificação(123456789, 9));
+    System.out.println(Verificacao(123456789, 9));
   }
 }

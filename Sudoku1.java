@@ -1,40 +1,35 @@
 public class Sudoku1
 {
-  static int num, d;
+  static int num, d, soma = 0, multiplicacao = 1; // variáveis usadas por múltiplas funções
+
   public static int verificacao(int num, int d)
   {
+    // recolha de dados
+    // --------------------------------------------------------------------------------------------------------
+    int n = num, tamanhoNum = 0, maior = 0, menor = d;
+    while (n > 0)
+    {
+      int digito = n % 10; // último dígito de n
+      n /= 10; // n perde o seu último dígito
+      tamanhoNum++; // tamanho de num
+      if (digito > maior) // Se o algarismo das unidades for maior que o maior atual...
+          maior = digito; // ... o maior passa a ser a atual unidade
+      if (digito < menor) // Se o algarismo das unidades for menor que o menor atual...
+          menor = digito; // ... o menor passa a ser a atual unidade
+    }
+    // --------------------------------------------------------------------------------------------------------
+    
     // Condição 1
-    //------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------------------
     boolean out1 = false; // valor de saída para a função 1: true se a condição 2 for verdadeira, falsa se não
     if (num > 0) // num é positivo?
     {
-      // num tem d dígitos?
-      int n = num, contador = 0;
-      while (n > 0)
-      {
-        n /= 10;
-        contador++;
-      }
-      out1 = contador == d? true:false;
+      out1 = tamanhoNum == d? true:false; // num tem d dígitos?
     }
-    //------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------------------
     
     // Condição 2
-    //------------------------------------------------------------
-    int maior = 0, menor = 9, n = num;
-    while (n > 0)
-    {
-      int unidade = n % 10; // algarismo das unidades de n
-      n /= 10; // n perde o seu atual algarismo das unidades
-
-      if (unidade > maior) // Se o algarismo das unidades for maior que o maior atual...
-          maior = unidade;// ... o maior passa a ser a atual unidade
-      
-      if (unidade < menor) // Se o algarismo das unidades for menor que o menor atual...
-          menor = unidade; // ... o menor passa a ser a atual unidade
-    }
-        
-    
+    // --------------------------------------------------------------------------------------------------------
     boolean menorEum = menor == 1? true:false; // o menor digito é 1?
     boolean maiorEd = maior == d? true:false; // o maior dígito é d?
     boolean out2; // valor de saída para a condição 2
@@ -42,43 +37,26 @@ public class Sudoku1
       out2 = true;
     else  
       out2 = false;
-    //------------------------------------------------------------  
+    // --------------------------------------------------------------------------------------------------------
     
     //Condição 3
-    //-------------------------------------------------------------
-    n = num;
-    
+    // --------------------------------------------------------------------------------------------------------
     // soma e multiplicação
-    int soma = 0;
-    int mult = 0;
-    for (int i = 1; i <= d; i++) // necessário
+    n = num;
+    int digito, soma_ = 0, multiplicacao_ = 1;
+    for (int i = 1; i <= d; i++)
     {
       soma += i;
-      mult *= i;
-    }
-    
-    int unidade;
-    int soma_ = 0;
-    for (int i = 0; i < d; i++) // Converger
-    {
-      unidade = n % 10;
+      multiplicacao *= i;
+      digito = n % 10;
       n /= 10;
-      soma_ += unidade;
+      soma_ += digito;
+      multiplicacao_ *= digito;
     }
     boolean somaIgual = soma == soma_? true:false;
-    
-    int mult_ = 0;
-    for (int i = 0; i < d; i++) // Converger
-    {
-      unidade = n % 10;
-      n /= 10;
-      mult_ *= unidade;
-    }
-    boolean multIgual = mult == mult_? true:false;
-    
+    boolean multIgual = multiplicacao == multiplicacao_? true:false;
     boolean out3 = somaIgual == true && multIgual == true? true:false;
-    //-------------------------------------------------------------
-    
+    // --------------------------------------------------------------------------------------------------------
     
     // Retorno
     int output;
@@ -91,7 +69,6 @@ public class Sudoku1
         output = 1;
       else if ((out2 == false) || (out2 == false && out3 == false))
         output = 2;
-      
       else // Se a condição 3 for a única falsa
         output = 3;
     }
@@ -108,27 +85,29 @@ public class Sudoku1
         mensagem = "valor aceite";
         break;
       case 1:
-        mensagem = String.format("valor negado...\no valor digitado não é positivo ou não tem %d dígitos", d);
+        mensagem = String.format("valor negado...\n%d não é positivo ou não tem %d dígitos",num, d);
         break;
       case 2:
-        mensagem = String.format("valor negado...\no menor dígito de %d não é '1' ou o maior não é %d", num, d);
+        mensagem = String.format("valor negado...\no menor dígito de %d não é 1 ou o maior não é %d", num, d);
         break;
       case 3:
-        mensagem = String.format("valor negado...\na soma dos dígitos de %d não é igual a 1+2+...+%d ou o seu produto não é igual a 1x2x...x%d", num, d, d);
+        mensagem = String.format("valor negado...\na soma dos dígitos de %d não é %d ou o seu produto não é %d", num, soma, multiplicacao);
         break;
       default:
         mensagem = "valor negado";
-    }
+      }
+    System.out.println(val); // Temporária: para deteção de erros
     System.out.println(mensagem);
   }
 
 
   public static void main(String[] arg)
   {
-    num = 5341;
+    /* Não executar o método verificação mais de que uma vez de forma a evitar que as variáveis soma
+    e multiplicação assumam valores errados */ 
+    num = 12345;
     d = 5;
     analise(verificacao(num, d));
-    System.out.println(verificacao(num, d));
   }
 
 }

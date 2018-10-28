@@ -1,106 +1,86 @@
-import sun.reflect.generics.tree.Tree;
 
 public class Sudoku
 {
-  public static int Verificação(int num, int d)
-  {
-    // Condição 1
-    //------------------------------------------------------------
-    boolean out1 = false; // valor de saída para a função 1: true se a condição 2 for verdadeira, falsa se não
-    if (num > 0) // num é positivo?
+
+    public static void main(String[] args)
     {
-      // num tem d dígitos?
-      int n = num, contador = 0;
-      while (n > 0)
-      {
-        n /= 10;
-        contador++;
-      }
-      out1 = contador == d? true:false;
+	Verificacao(123456789, 9);
+	Verificacao(12345679, 9);
+	Verificacao(1234567893, 9);
+	Verificacao(234567892, 9);
+	Verificacao(123456785, 9);
+	Verificacao(123447789, 9);
     }
-    //------------------------------------------------------------
-    
-    // Condição 2
-    //------------------------------------------------------------
-    int maior = 0, menor = 9, n = num;
-    while (n > 0)
+
+    public static int Verificacao(int num, int d)
     {
-      int unidade = n % 10; // algarismo das unidades de n
-      n /= 10; // n perde o seu atual algarismo das unidades
+	// ------------------------------------------------------------
+	// Condição 1
+	// ------------------------------------------------------------
 
-      if (unidade > maior) // Se o algarismo das unidades for maior que o maior atual...
-          maior = unidade;// ... o maior passa a ser a atual unidade
-      
-      if (unidade < menor) // Se o algarismo das unidades for menor que o menor atual...
-          menor = unidade; // ... o menor passa a ser a atual unidade
+	    int n = num, contador = 0;
+	    while (n > 0)
+	    {
+		n /= 10;
+		contador++;
+	    }
+	    if (contador != d )
+	    {
+		System.out.println("o numero " + num + " nao verifica a condicao \"positivo e tem " + 9 + " digitos\".");
+		return 1;
+	    }
+	// ------------------------------------------------------------
+	// Condição 2
+	// ------------------------------------------------------------
+
+	int maior = 0, menor = d;
+	n = num;
+	while (n > 0)
+	{
+	    int unidade = n % 10; // algarismo das unidades de n
+	    n /= 10; // n perde o seu atual algarismo das unidades
+
+	    if (unidade > maior) // Se o algarismo das unidades for maior que o maior atual...
+		maior = unidade;// ... o maior passa a ser a atual unidade
+
+	    if (unidade < menor) // Se o algarismo das unidades for menor que o menor atual...
+		menor = unidade; // ... o menor passa a ser a atual unidade
+	}
+
+	if (maior != d || menor != 1)
+	{
+	    System.out.println( "O numero " + num + " nao verifica a condicao \"maior digito " + d + " e menor digito 1\".");
+	    return 2;
+	}
+	// ------------------------------------------------------------
+	// Condição 3
+	// -------------------------------------------------------------
+	n = num;
+
+	int soma = 0;
+	int mult = 1;
+	for (int i = 1; i <= d; i++)
+	{
+	    soma += i;
+	    mult *= i;
+	}
+
+	int soma_ = 0;
+	int mult_ = 1;
+	for (int i = 0; i < d; i++)
+	{
+	    soma_ += n % 10;
+	    mult_ *= n % 10;
+	    n /= 10;
+	}
+
+	if (mult != mult_ || soma != soma_)
+	{
+	    System.out.println("O numero " + num + " nao verifica a condicao \"soma digitos " + soma + " e produto digitos " + mult + "\".");
+	    return 3;
+	}
+
+	System.out.println("O numero " + num + " passou todas as condicoes verificadas.");
+	return 0;
     }
-        
-    
-    boolean menorEum = menor == 1? true:false; // o menor digito é 1?
-    boolean maiorEd = maior == d? true:false; // o maior dígito é d?
-    boolean out2; // valor de saída para a condição 2
-    if (menorEum == true && maiorEd == true)
-    out2 = true;
-    else  
-    out2 = false;
-    //------------------------------------------------------------  
-    
-    //Condição 3
-    //-------------------------------------------------------------
-    n = num;
-
-    // Soma
-    int soma = 0;
-    for (int i = 1; i <= d; i++)
-    {
-      soma += i; 
-    }
-  
-    int unidade;
-    int soma_ = 0;
-    for (int i = 0; i < d; i++)
-    {
-      unidade = n % 10;
-      n /= 10;
-      soma_ += unidade;
-    }
-    boolean somaIgual = soma == soma_? true:false;
-
-    // Multiplicação
-    int mult = 0;
-    for (int i = 1; i <= d; i++)
-    {
-      mult *= i; 
-    }
-    
-    int mult_ = 0;
-    for (int i = 0; i < d; i++)
-    {
-      unidade = n % 10;
-      n /= 10;
-      mult_ *= unidade;
-    }
-    boolean multIgual = mult == mult_? true:false;
-    
-
-    boolean out3 = somaIgual == true && multIgual == true? true:false;
-
-    // Retorno
-    if (out1 == true && out2 == true && out3 == true)
-    return 0;
-    else  
-    return 1;
-  }    
-  
-
-
-  public static void()
-  {
-    
-  }
-
-  public static void main(String[] args)
-  {
-    System.out.println(Verificação(123456789, 9));
-  }
 }

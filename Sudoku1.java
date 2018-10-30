@@ -1,113 +1,85 @@
-public class Sudoku1
+public class Sudoku
 {
-  static int num, d, soma = 0, multiplicacao = 1; // variáveis usadas por múltiplas funções
 
-  public static int verificacao(int num, int d)
-  {
-    // recolha de dados
-    // --------------------------------------------------------------------------------------------------------
-    int n = num, tamanhoNum = 0, maior = 0, menor = d;
-    while (n > 0)
+    public static void main(String[] args)
     {
-      int digito = n % 10; // último dígito de n
-      n /= 10; // n perde o seu último dígito
-      tamanhoNum++; // tamanho de num
-      if (digito > maior) // Se o algarismo das unidades for maior que o maior atual...
-          maior = digito; // ... o maior passa a ser a atual unidade
-      if (digito < menor) // Se o algarismo das unidades for menor que o menor atual...
-          menor = digito; // ... o menor passa a ser a atual unidade
+	Verificacao(123456789, 9);
+	Verificacao(12345679, 9);
+	Verificacao(1234567893, 9);
+	Verificacao(234567892, 9);
+	Verificacao(123456785, 9);
+	Verificacao(123447789, 9);
     }
-    // --------------------------------------------------------------------------------------------------------
-    
-    // Condição 1
-    // --------------------------------------------------------------------------------------------------------
-    boolean out1 = false; // valor de saída para a função 1: true se a condição 2 for verdadeira, falsa se não
-    if (num > 0) // num é positivo?
+
+    public static int Verificacao(int num, int d)
     {
-      out1 = tamanhoNum == d? true:false; // num tem d dígitos?
+	// ------------------------------------------------------------
+	// Condição 1
+	// ------------------------------------------------------------
+
+	    int n = num, contador = 0;
+	    while (n > 0)
+	    {
+		n /= 10;
+		contador++;
+	    }
+	    if (contador != d )
+	    {
+		System.out.println("o numero " + num + " nao verifica a condicao \"positivo e tem " + 9 + " digitos\".");
+		return 1;
+	    }
+	// ------------------------------------------------------------
+	// Condição 2
+	// ------------------------------------------------------------
+
+	int maior = 0, menor = d;
+	n = num;
+	while (n > 0)
+	{
+	    int unidade = n % 10; // algarismo das unidades de n
+	    n /= 10; // n perde o seu atual algarismo das unidades
+
+	    if (unidade > maior) // Se o algarismo das unidades for maior que o maior atual...
+		maior = unidade;// ... o maior passa a ser a atual unidade
+
+	    if (unidade < menor) // Se o algarismo das unidades for menor que o menor atual...
+		menor = unidade; // ... o menor passa a ser a atual unidade
+	}
+
+	if (maior != d || menor != 1)
+	{
+	    System.out.println( "O numero " + num + " nao verifica a condicao \"maior digito " + d + " e menor digito 1\".");
+	    return 2;
+	}
+	// ------------------------------------------------------------
+	// Condição 3
+	// -------------------------------------------------------------
+	n = num;
+
+	int soma = 0;
+	int mult = 1;
+	for (int i = 1; i <= d; i++)
+	{
+	    soma += i;
+	    mult *= i;
+	}
+
+	int soma_ = 0;
+	int mult_ = 1;
+	for (int i = 0; i < d; i++)
+	{
+	    soma_ += n % 10;
+	    mult_ *= n % 10;
+	    n /= 10;
+	}
+
+	if (mult != mult_ || soma != soma_)
+	{
+	    System.out.println("O numero " + num + " nao verifica a condicao \"soma digitos " + soma + " e produto digitos " + mult + "\".");
+	    return 3;
+	}
+
+	System.out.println("O numero " + num + " passou todas as condicoes verificadas.");
+	return 0;
     }
-    // --------------------------------------------------------------------------------------------------------
-    
-    // Condição 2
-    // --------------------------------------------------------------------------------------------------------
-    boolean menorEum = menor == 1? true:false; // o menor digito é 1?
-    boolean maiorEd = maior == d? true:false; // o maior dígito é d?
-    boolean out2; // valor de saída para a condição 2
-    if (menorEum == true && maiorEd == true)
-      out2 = true;
-    else  
-      out2 = false;
-    // --------------------------------------------------------------------------------------------------------
-    
-    //Condição 3
-    // --------------------------------------------------------------------------------------------------------
-    // soma e multiplicação
-    n = num;
-    int digito, soma_ = 0, multiplicacao_ = 1;
-    for (int i = 1; i <= d; i++)
-    {
-      soma += i;
-      multiplicacao *= i;
-      digito = n % 10;
-      n /= 10;
-      soma_ += digito;
-      multiplicacao_ *= digito;
-    }
-    boolean somaIgual = soma == soma_? true:false;
-    boolean multIgual = multiplicacao == multiplicacao_? true:false;
-    boolean out3 = somaIgual == true && multIgual == true? true:false;
-    // --------------------------------------------------------------------------------------------------------
-    
-    // Retorno
-    int output;
-    if (out1 == true && out2 == true && out3 == true)
-      output = 0;
-    else 
-    {
-      if ((out1 == false && out2 == false && out3 == false) || 
-	        (out1 == false && out2 == false) || (out1 == false && out3 == false) )
-        output = 1;
-      else if ((out2 == false) || (out2 == false && out3 == false))
-        output = 2;
-      else // Se a condição 3 for a única falsa
-        output = 3;
-    }
-    return output;
-  }    
-
-
-  public static void analise(int val)
-  {
-    String mensagem;
-    switch(val)
-    {
-      case 0:
-        mensagem = "valor aceite";
-        break;
-      case 1:
-        mensagem = String.format("valor negado...\n%d não é positivo ou não tem %d dígitos",num, d);
-        break;
-      case 2:
-        mensagem = String.format("valor negado...\no menor dígito de %d não é 1 ou o maior não é %d", num, d);
-        break;
-      case 3:
-        mensagem = String.format("valor negado...\na soma dos dígitos de %d não é %d ou o seu produto não é %d", num, soma, multiplicacao);
-        break;
-      default:
-        mensagem = "valor negado";
-      }
-    System.out.println(val); // Temporária: para deteção de erros
-    System.out.println(mensagem);
-  }
-
-
-  public static void main(String[] arg)
-  {
-    /* Não executar o método verificação mais de que uma vez de forma a evitar que as variáveis soma
-    e multiplicação assumam valores errados */ 
-    num = 12345;
-    d = 5;
-    analise(verificacao(num, d));
-  }
-
 }
